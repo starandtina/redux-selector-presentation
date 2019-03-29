@@ -1,0 +1,238 @@
+import { CodeSurfer } from 'mdx-deck-code-surfer'
+import { Appear, Notes, Image } from 'mdx-deck'
+import SyntaxHighlighter from 'react-syntax-highlighter/prism'
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+
+export { dark as theme } from 'mdx-deck/themes'
+import { Split } from 'mdx-deck/layouts'
+
+# Redux Selector: A Quick Intro
+
+---
+
+# What is Redux Selector
+
+---
+
+## state => ({})
+
+---
+
+##
+
+<div style={{ fontSize: '26px' }}>
+  A selector is a small <strong>function</strong> that can take the entire Redux
+  state, and pick out a value from it.
+</div>
+
+---
+
+##
+
+mapStateToProps
+
+---
+
+##
+
+<SyntaxHighlighter language="javascript" style={atomDark}>
+  const getUsers = state => state.users.byId
+</SyntaxHighlighter>
+
+---
+
+# Why we need it
+
+---
+
+## Encapsulation
+
+---
+
+### Hide the detail of the Redux State Shape
+
+---
+
+### Use case: Todos App
+
+---
+
+#### Redux State
+
+<SyntaxHighlighter language='javascript' style={atomDark}>
+{require('!raw-loader!./state.js')}
+</SyntaxHighlighter>
+---
+
+#### mapStateToProps
+
+<SyntaxHighlighter language='javascript' style={atomDark}>
+{
+`function mapStateToProps(state) {
+   return {
+     todos: state.todos,
+     filter: state.visibilityFilter
+   }
+}`
+}
+</SyntaxHighlighter>
+---
+
+### If the state shape changes
+
+---
+
+####
+
+<CodeSurfer
+  code={require('!raw-loader!./store-changed.js')}
+  lang="javascript"
+  showNumbers={false}
+  steps={[
+    { notes: 'Use ⬆️ and ⬇️ keys' },
+    { range: [5, 8], notes: 'state.todos -> state.user.todos' },
+  ]}
+/>
+---
+
+####
+
+<CodeSurfer
+  code={require('!raw-loader!./mapStateToPropsChanged.js')}
+  lang="javascript"
+  showNumbers={false}
+  steps={[
+    { notes: 'Use ⬆️ and ⬇️ keys' },
+    { lines: [3], notes: 'state.todos -> state.user.todos' },
+  ]}
+/>
+
+---
+
+## Refactor: Redux Selector
+
+---
+
+<SyntaxHighlighter language="javascript" style={atomDark}>
+{
+`function selectTodos(state) {
+  return state.user.todos
+}`
+}
+</SyntaxHighlighter>
+<SyntaxHighlighter language="javascript" style={atomDark}>
+{
+`function mapStateToProps(state) {
+  return {
+    todos: selectTodos(state),
+    filter: state.visibilityFilter,
+  }
+}`
+}
+</SyntaxHighlighter>
+
+---
+
+## Compute derived data
+
+---
+
+## Performance
+
+---
+
+### Use case
+
+<SyntaxHighlighter
+  language="javascript"
+  style={atomDark}
+  customStyle={{ fontSize: '16px' }}
+>
+  {require('!raw-loader!./expensiveMapStateToProps.js')}
+</SyntaxHighlighter>
+
+---
+
+### Memoization
+
+---
+
+##### A memoized function will <strong>remember</strong> the <strong>last</strong> set of arguments it received, and the value it returned!
+
+---
+
+### [Reselect](https://github.com/reduxjs/reselect): Selector library for Redux
+
+---
+
+<iframe
+  width="680px"
+  height="600px"
+  src="//jsfiddle.net/starandtina/zbceuhk5/9/embedded/js/dark/"
+  allowfullscreen="allowfullscreen"
+  allowpaymentrequest
+  frameborder="0"
+/>
+
+---
+
+<SyntaxHighlighter
+  language="javascript"
+  style={atomDark}
+  customStyle={{ fontSize: '16px' }}
+>
+{`const a = someSelector(state, 1) // first call, not memoized
+const b = someSelector(state, 1) // same inputs, memoized
+const c = someSelector(state, 2) // different inputs, not memoized
+const d = someSelector(state, 1) // different inputs from last time, not memoized`
+}
+</SyntaxHighlighter>
+---
+
+### Optimize Performance with Reselect
+
+<SyntaxHighlighter
+  language="javascript"
+  style={atomDark}
+  customStyle={{ fontSize: '16px' }}
+>
+  {require('!raw-loader!./expensiveMapStateToPropsWithReselect.js')}
+</SyntaxHighlighter>
+
+---
+
+## Two Reasons
+
+<ul style={{ textAlign: 'left' }}>
+  <Appear>
+    <li>
+      Call expensive transformation only if <strong>state.someData</strong>{' '}
+      changed
+    </li>
+    <li>Shallow equality with react-redux</li>
+  </Appear>
+</ul>
+
+---
+
+## Composable
+
+<SyntaxHighlighter
+  language="javascript"
+  style={atomDark}
+  customStyle={{ fontSize: '16px' }}
+>
+  {require('!raw-loader!./createSelector.js')}
+</SyntaxHighlighter>
+
+---
+
+# When to use it
+
+There is no "right" answer!
+
+---
+
+Thanks!
+
+---

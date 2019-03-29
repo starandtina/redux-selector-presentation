@@ -1,0 +1,18 @@
+{
+  "name": "redux-selector-presentation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "mdx-deck redux-selector-presentation.mdx",
+    "build": "mdx-deck build --no-html redux-selector-presentation.mdx"
+  },
+  "author": "starandtina",
+  "license": "MIT",
+  "devDependencies": {
+    "mdx-deck": "^1.8.2",
+    "mdx-deck-code-surfer": "^0.5.3",
+    "raw-loader": "^1.0.0",
+    "react-syntax-highlighter": "^10.2.1"
+  }
+}
